@@ -1,6 +1,6 @@
 # ts-memoize
 
-Use memoize pattern in your TypeScript code with easy API.
+Use memoize pattern in your TypeScript code with only one API.
 
 ## Installation
 
@@ -13,10 +13,8 @@ yarn add ts-memoize
 
 ## Usage
 
-For class:
-
 ```ts
-@memoize
+import memoize from 'ts-memoize';
 ```
 
 For function:
@@ -28,7 +26,7 @@ const memoizedGetter = memoize((a, b) => {
 });
 ```
 
-Examples:
+For class:
 
 ```ts
 // on getter (& setter)
