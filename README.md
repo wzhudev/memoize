@@ -22,7 +22,7 @@ For function:
 ```ts
 const memoizedGetter = memoize((a, b) => {
   // the function should not depend on values outside of its scope
-  return someHeavyRevaluation(a, b);
+  return someHeavyEvaluation(a, b);
 });
 ```
 
@@ -33,7 +33,7 @@ For class:
 class A {
   @memoize
   public get a() {
-    return someHeavyRevaluation();
+    return someHeavyEvaluation();
   }
 
   public set value(val) {
@@ -46,7 +46,7 @@ class B {
   @memoize
   public getFunction(param) {
     // re-evaluate when arguments change
-    return someHeavyRevaluation(param);
+    return someHeavyEvaluation(param);
   }
 }
 ```
