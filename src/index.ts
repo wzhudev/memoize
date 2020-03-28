@@ -1,10 +1,30 @@
-export function memoize(target: any, key: string, descriptor: any) {
+function memoizeFunc<T extends Function>(fn: T): T {
+  let lastValue: any | undefined = undefined;
+  let lastParams: any[] = [];
+  let newParams: any[] = [];
+
+  const result = function(...args: any[]) {
+    newParams = [...args];
+
+    if (!exactEqual(lastParams, newParams)) {
+      lastValue = fn(...args);
+    }
+
+    lastParams = newParams;
+
+    return lastValue;
+  };
+
+  return (result as any) as T;
+}
+
+function memoizeDecorator(target: any, key: string, descriptor: any) {
   return createMemoizer()(target, key, descriptor);
 }
 
 let memoizerId = 0;
 
-export function createMemoizer() {
+function createMemoizer() {
   const memoizePrefix = `memoizer:${memoizerId++}`;
   let self: any = undefined;
 
@@ -97,3 +117,23 @@ const exactEqual = function(a: any[], b: any[]) {
 
   return true;
 };
+
+function memoize<T>(target: any, key: string, descriptor: any): any;
+function memoize<T extends Function>(fn: T): T;
+function memoize(...args: any[]) {
+  const l = args.length;
+
+  if (l === 1) {
+    return memoizeFunc(args[0]);
+  } else if (l === 3) {
+    return memoizeDecorator(args[0], args[1], args[2]);
+  } else {
+    throw new Error(
+      '[ts-memoize] expect three parameters as decorator or one parameter as higher order function, ' +
+        'but got ' +
+        l
+    );
+  }
+}
+
+export default memoize;

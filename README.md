@@ -1,37 +1,54 @@
 # ts-memoize
 
-Sometimes it's expensive to calculate some value. With ts-memoize, you can use memoize pattern easily for TypeScript classes, to avoid uncessary comsumptions.
+Use memoize pattern in your TypeScript code with easy API.
 
-Only **one** API:
+## Installation
+
+```bash
+npm install ts-memoize
+
+# or yarn
+yarn add ts-memoize
+```
+
+## Usage
+
+For class:
 
 ```ts
 @memoize
 ```
 
-Some examples:
+For function:
 
 ```ts
-// On getters.
+const memoizedGetter = memoize((a, b) => {
+  // the function should not depend on values outside of its scope
+  return someHeavyRevaluation(a, b);
+});
+```
+
+Examples:
+
+```ts
+// on getter (& setter)
 class A {
   @memoize
   public get a() {
-    return 'a';
+    return someHeavyRevaluation();
+  }
+
+  public set value(val) {
+    // re-evaluate when the setter is invoked
   }
 }
 
-// On any methods.
+// on method
 class B {
   @memoize
-  public getFunction() {
-    return 'a';
-  }
-}
-
-// Even methods with parameters...
-class C {
-  @memoize
-  public getFunction(acc: number): number {
-    return acc + 1;
+  public getFunction(param) {
+    // re-evaluate when arguments change
+    return someHeavyRevaluation(param);
   }
 }
 ```
