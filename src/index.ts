@@ -5,7 +5,7 @@ function memoizeFunc<T extends Function>(fn: T): T {
   let newParams: any[] = [];
 
   const result = function (...args: any[]) {
-    newParams = [...args];
+    newParams = args;
 
     if (!runned) {
       lastValue = fn(...args);
