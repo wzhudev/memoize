@@ -1,12 +1,16 @@
 function memoizeFunc<T extends Function>(fn: T): T {
+  let runned = false;
   let lastValue: any | undefined = undefined;
   let lastParams: any[] = [];
   let newParams: any[] = [];
 
-  const result = function(...args: any[]) {
+  const result = function (...args: any[]) {
     newParams = [...args];
 
-    if (!exactEqual(lastParams, newParams)) {
+    if (!runned) {
+      lastValue = fn(...args);
+      runned = true;
+    } else if (!exactEqual(lastParams, newParams)) {
       lastValue = fn(...args);
     }
 
@@ -28,7 +32,7 @@ function createMemoizer() {
   const memoizePrefix = `memoizer:${memoizerId++}`;
   let self: any = undefined;
 
-  const result = function(_target: any, key: string, descriptor: any) {
+  const result = function (_target: any, key: string, descriptor: any) {
     let fnKey: string | null = null;
     let fn: Function | null = null;
     let dirty = true;
@@ -60,11 +64,11 @@ function createMemoizer() {
 
     const memoizerKey = `${memoizePrefix}:${key}`;
 
-    descriptor[fnKey!] = function(...args: any[]) {
+    descriptor[fnKey!] = function (...args: any[]) {
       self = this;
       newParams = [...args];
 
-      const valueUpdator = function() {
+      const valueUpdator = function () {
         dirty = dirty || !exactEqual(newParams, lastParams);
 
         if (dirty) {
@@ -76,7 +80,7 @@ function createMemoizer() {
         return lastValue;
       };
 
-      const setterUpdator = function() {
+      const setterUpdator = function () {
         if (dirty) {
           lastValue = fn!.apply(self);
           dirty = false;
@@ -98,7 +102,7 @@ function createMemoizer() {
     };
 
     if (setterFn) {
-      descriptor.set = function(...args: any[]) {
+      descriptor.set = function (...args: any[]) {
         dirty = true;
         setterFn!.apply(this, args);
       };
@@ -108,7 +112,7 @@ function createMemoizer() {
   return result;
 }
 
-const exactEqual = function(a: any[], b: any[]) {
+const exactEqual = function (a: any[], b: any[]) {
   if (a.length !== b.length) return false;
 
   for (let i = 0; i < a.length; i++) {
@@ -130,8 +134,8 @@ function memoize(...args: any[]) {
   } else {
     throw new Error(
       '[ts-memoize] expect three parameters as decorator or one parameter as higher order function, ' +
-        'but got ' +
-        l
+      'but got ' +
+      l
     );
   }
 }

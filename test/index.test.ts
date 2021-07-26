@@ -113,5 +113,18 @@ describe('ts-memoize', () => {
       expect(a(2)).toBe(3);
       expect(count).toBe(2);
     });
+
+    it('should support no args function', () => {
+      const a = memoize(() => {
+        count += 1;
+        return 0;
+      });
+
+      expect(a()).toBe(0);
+      expect(count).toBe(1);
+
+      expect(a()).toBe(0);
+      expect(count).toBe(1);
+    });
   });
 });
