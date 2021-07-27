@@ -33,7 +33,7 @@ export function memoize(cacheKeyFn?: CacheKeyFn<any>) {
             const rawSetter = descriptor.set
             descriptor.set = function(...args: any[]) {
                 hasRun = false // intercept setter to mark getter as refreshed
-                rawSetter!.apply(this, args)
+                rawSetter.apply(this, args)
             }
         }
 

@@ -11,7 +11,8 @@
     "build:esm": "tsc --module ES6 --outDir esm",
     "test": "jest --coverage"
   },
-  "author": "",
+  "private": false,
+  "author": "wendellhu95 <wendellhu95@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@types/jest": "^24.0.25",

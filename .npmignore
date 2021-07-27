@@ -6,3 +6,4 @@ example
 .next
 .DS_Store
 azure-pipelines.yml
+src
