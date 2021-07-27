@@ -14,7 +14,7 @@ yarn add @wendellhu/memoize
 ## Usage
 
 ```ts
-import { memoizeFunc } from '@wendellhu/memoize';
+import { memoizeFunc, memoize } from '@wendellhu/memoize';
 ```
 
 For function:
