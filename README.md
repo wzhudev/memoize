@@ -1,26 +1,26 @@
-# ts-memoize
+# memoize
 
-Use memoize pattern in your TypeScript code with only one API.
+Use memoize pattern in your TypeScript code.
 
 ## Installation
 
 ```bash
-npm install ts-memoize
+npm install @wendellhu/memoize
 
 # or yarn
-yarn add ts-memoize
+yarn add @wendellhu/memoize
 ```
 
 ## Usage
 
 ```ts
-import memoize from 'ts-memoize';
+import { memoizeFunc } from '@wendellhu/memoize';
 ```
 
 For function:
 
 ```ts
-const memoizedGetter = memoize((a, b) => {
+const memoizedGetter = memoizeFunc((a, b) => {
   // the function should not depend on values outside of its scope
   return someHeavyEvaluation(a, b);
 });
@@ -29,9 +29,11 @@ const memoizedGetter = memoize((a, b) => {
 For class:
 
 ```ts
+import { memoize } from '@wendellhu/memoize';
+
 // on getter (& setter)
 class A {
-  @memoize
+  @memoize()
   public get a() {
     return someHeavyEvaluation();
   }
@@ -43,10 +45,19 @@ class A {
 
 // on method
 class B {
-  @memoize
+  @memoize()
   public getFunction(param) {
     // re-evaluate when arguments change
     return someHeavyEvaluation(param);
+  }
+}
+
+// or with key
+class C {
+  @memoize((param) => toKey(param))
+  public getFunction(param, anotherParam) {
+    // re-evaluate when arguments change, and cache by groups according to `key`
+    return someHeavyEvaluation(param, anotherParam);
   }
 }
 ```
